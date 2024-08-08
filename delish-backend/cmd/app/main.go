@@ -1,20 +1,27 @@
 package main
 
 import (
-	"net/http"
+	"delish-backend/internal/initializers"
+	dish_routes "delish-backend/internal/routes/v1"
+
 	"github.com/gin-gonic/gin"
 )
 
+func init() {
+	// Load environment variables
+	initializers.LoadEnvs()
+
+	// Initialize the database
+	initializers.InitDB()
+}
 
 func main() {
+	// Initialize the application
 	app := gin.Default()
 
-	app.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{
-			"success": true,
-			"message": "Hello, World!",
-		})
-	})
+	// Use the routes
+	dish_routes.Use(app)
 
+	// Run the application
 	app.Run()
 }
