@@ -7,16 +7,19 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func InitDB() *gorm.DB {
 	// Get the database URL from the environment variable
 	dsn := os.Getenv("DB_URL")
 
 	// Open a connection to the database
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	var err error
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
 	// Return the database connection to be used by the application
-	return db
+	return DB
 }
