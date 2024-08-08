@@ -1,4 +1,3 @@
-# typed: true
 require 'securerandom'
 
 class ApplicationRecord < ActiveRecord::Base

@@ -36,9 +36,9 @@ gem "bootsnap", require: false
 gem "rack-cors"
 
 # Use sorbet for type safety
-gem 'sorbet', :group => :development
-gem 'sorbet-runtime'
-gem 'tapioca', require: false, :group => [:development, :test]
+# gem 'sorbet', :group => :development
+# gem 'sorbet-runtime'
+# gem 'tapioca', require: false, :group => [:development, :test]
 
 # Use devise for authentication and devise-jwt for JWT tokens
 gem 'devise'
