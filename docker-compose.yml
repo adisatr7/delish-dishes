@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+
+  backend:
+    build:
+      context: ./delish-backend
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./delish-frontend
+    ports:
+      - 8080:8080
+    depends_on:
+      - backend
+    volumes:
+      - ./public:/app/public
+      - ./src:/app/src
