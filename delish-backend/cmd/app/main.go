@@ -29,6 +29,20 @@ func main() {
     // Initialize the application
     app := gin.New()
 
+    // Set trusted proxies (only for production)
+    if os.Getenv("GO_ENV") == "production" {
+        // Set list of trusted proxies
+        err := app.SetTrustedProxies([]string{
+            "192.168.1.1",
+            "192.168.1.2",
+        })
+
+        // Panic if any error occurred
+        if err != nil {
+            panic(err)
+        }
+    }
+
     // Use the default recovery middleware for error handling
     app.Use(gin.Recovery())
 
