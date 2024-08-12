@@ -8,12 +8,12 @@ import (
 
 type Order struct {
 	gorm.Model
-	ID           string 		`gorm:"primaryKey"`
-	CustomerName string
-	TotalPrice   string
+	ID           string 		`gorm:"primaryKey;type:uuid"`
+	CustomerName string			`gorm:"type:varchar(256);index:cust_name;not null"`
+	TotalPrice   uint64			`gorm:"not null"`
 	Note         *string
 	DishOrders   []DishOrder 	`gorm:"foreignKey:OrderID"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	CreatedAt    time.Time		`gorm:"autoCreateTime"`
+	UpdatedAt    time.Time		`gorm:"autoUpdateTime"`
 	DeletedAt    gorm.DeletedAt
 }

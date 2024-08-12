@@ -8,11 +8,11 @@ import (
 
 type Dish struct {
 	gorm.Model
-	ID        string 		`gorm:"primaryKey"`
-	Name      string
-	Desc      string
-	DishOrder []DishOrder 	`gorm:"foreignKey:DishID"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        string      `gorm:"primaryKey;type:uuid"`
+	Name      string      `gorm:"type:varchar(256);index:dish_name;not null"`
+	Desc      *string     `gorm:"type:varchar(256)"`
+	DishOrder []DishOrder `gorm:"foreignKey:DishID"`
+	CreatedAt time.Time   `gorm:"autoCreateTime"`
+	UpdatedAt time.Time   `gorm:"autoUpdateTime"`
 	DeletedAt gorm.DeletedAt
 }
