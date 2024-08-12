@@ -13,7 +13,7 @@ func CreateDish(ctx *gin.Context) {
 	var body struct {
 		Name  string
 		Desc  string
-		Price *int64
+		Price *uint64
 	}
 	ctx.BindJSON(&body)
 
