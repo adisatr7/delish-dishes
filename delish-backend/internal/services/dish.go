@@ -13,7 +13,7 @@ import (
 type DishParams struct {
 	Name string
 	Desc string
-	Price int64
+	Price uint64
 }
 
 // Get the database instance
