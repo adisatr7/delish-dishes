@@ -1,0 +1,166 @@
+package v1
+
+import (
+	"delish-backend/internal/services"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+// Create a new Order record
+func CreateOrder(ctx *gin.Context) {
+	// Parse the request body
+	var body struct {
+		CustomerName *string
+		Note         *string
+		DishOrders   []services.DishOrder
+	}
+	ctx.BindJSON(&body)
+
+	// Validate the request body
+	if body.CustomerName == nil || *body.CustomerName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Customer name is required!",
+			"success": false,
+		})
+		return
+	}
+	if len(body.DishOrders) == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Dish orders are required!",
+			"success": false,
+		})
+		return
+	}
+
+	// Create a new Order record
+	err := services.CreateOrder(services.CreateOrderParams{
+		CustomerName: *body.CustomerName,
+		DishOrders:   body.DishOrders,
+	})
+
+	// On error, return a 500 Internal Server Error response
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"success": false,
+		})
+		return
+	}
+
+	// On success, return a 201 Created response
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "Order created successfully!",
+		"success": true,
+	})
+}
+
+// Get all Order records
+func GetAllOrders(ctx *gin.Context) {
+	// Get all Order records
+	orders, err := services.GetAllOrders()
+
+	// On error, return a 500 Internal Server Error response
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"success": false,
+		})
+		return
+	}
+
+	// On success, return a 200 OK response with the Order records
+	ctx.JSON(http.StatusOK, gin.H{
+		"data":    orders,
+		"success": true,
+	})
+}
+
+// Get one Order record by its ID
+func GetOrderById(ctx *gin.Context) {
+	// Get the Order ID from the URL
+	orderId := ctx.Param("id")
+
+	// Get the Order record by its ID
+	order, err := services.GetOrderById(orderId)
+
+	// On error, return a 500 Internal Server Error response
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"success": false,
+		})
+		return
+	}
+
+	// On success, return a 200 OK response with the Order record
+	ctx.JSON(http.StatusOK, gin.H{
+		"data":    order,
+		"success": true,
+	})
+}
+
+// Update an Order record by its ID
+func UpdateOrderById(ctx *gin.Context) {
+	// Get the Order ID from the URL
+	orderId := ctx.Param("id")
+
+	// Parse the request body
+	var body struct {
+		CustomerName *string
+	}
+	ctx.BindJSON(&body)
+
+	// Validate the request body
+	if body.CustomerName == nil || *body.CustomerName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Customer name is required!",
+			"success": false,
+		})
+		return
+	}
+
+	// Update the Order record by its ID. For now, only the customer name can be updated
+	err := services.UpdateOrder(orderId, services.UpdateOrderParams{
+		CustomerName: *body.CustomerName,
+	})
+
+	// On error, return a 500 Internal Server Error response
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"success": false,
+		})
+		return
+	}
+
+	// On success, return a 200 OK response
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Order has been updated successfully!",
+		"success": true,
+	})
+}
+
+// Delete an Order record by its ID
+func DeleteOrderById(ctx *gin.Context) {
+	// Get the Order ID from the URL
+	orderId := ctx.Param("id")
+
+	// Delete the Order record by its ID
+	err := services.DeleteOrderById(orderId)
+
+	// On error, return a 500 Internal Server Error response
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   err.Error(),
+			"success": false,
+		})
+		return
+	}
+
+	// On success, return a 200 OK response
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Order has been deleted successfully!",
+		"success": true,
+	})
+}

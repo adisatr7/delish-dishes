@@ -41,7 +41,7 @@ func CreateDish(ctx *gin.Context) {
 	}
 
 	// Create a new Dish record
-	err := services.CreateDish(services.Params{
+	err := services.CreateDish(services.DishParams{
 		Name:  body.Name,
 		Desc:  body.Desc,
 		Price: *body.Price,
@@ -140,7 +140,7 @@ func UpdateDishById(ctx *gin.Context) {
 	}
 
 	// Update the Dish record by its ID
-	err := services.UpdateDish(dishId, services.Params{
+	err := services.UpdateDish(dishId, services.DishParams{
 		Name: body.Name,
 		Desc: body.Desc,
 	})

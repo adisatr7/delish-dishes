@@ -3,7 +3,7 @@ package main
 import (
 	"delish-backend/internal/config"
 	"delish-backend/internal/initializers"
-	dishes_routes "delish-backend/internal/routes/v1"
+	useRoutes "delish-backend/internal/routes/v1"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -50,7 +50,8 @@ func main() {
     app.Use(cors.New(config.CORS))
 
     // Use the routes
-    dishes_routes.RegisterRoutes(app)
+    useRoutes.Dish(app)
+    useRoutes.Order(app)
 
     // Run the application
     app.Run()

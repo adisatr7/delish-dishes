@@ -9,8 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// Define the Params struct for CREATE and UPDATE operations
-type Params struct {
+// Define the DishParams struct for CREATE and UPDATE operations
+type DishParams struct {
 	Name string
 	Desc string
 	Price int64
@@ -31,7 +31,7 @@ func getDbInstance() (*gorm.DB, error) {
 }
 
 // Create a new Dish record
-func CreateDish(params Params) error {
+func CreateDish(params DishParams) error {
 	// Get the database instance
 	db, err := getDbInstance()
 	if err != nil {
@@ -72,7 +72,7 @@ func GetAllDishes() ([]*models.Dish, error) {
 	// Prepare a slice to store the Dish records
 	var dishes []*models.Dish
 
-	// Get all Dish records where deleted_at is NULL
+	// Get all Dish records
 	if err := db.Find(&dishes).Error; err != nil {
 		// Return the error if any
 		return nil, err
@@ -92,8 +92,8 @@ func GetDishById(id string) (*models.Dish, error) {
 	// Prepare a variable to store the Dish record
 	dish := &models.Dish{}
 
-	// Get the Dish record by its ID where deleted_at is NULL
-	if err := db.Where("id = ? AND deleted_at IS NULL", id).First(dish).Error; err != nil {
+	// Get the Dish record by its ID
+	if err := db.Where("id = ?", id).First(dish).Error; err != nil {
 		// Return the error if any
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func GetDishById(id string) (*models.Dish, error) {
 }
 
 // Update a Dish record by its ID
-func UpdateDish(id string, params Params) error {
+func UpdateDish(id string, params DishParams) error {
 	db, err := getDbInstance()
 	if err != nil {
 		return err
