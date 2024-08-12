@@ -3,7 +3,8 @@ package main
 import (
 	"delish-backend/internal/config"
 	"delish-backend/internal/initializers"
-	useRoutes "delish-backend/internal/routes/v1"
+	"delish-backend/internal/routes/v1/dish"
+	"delish-backend/internal/routes/v1/order"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -11,48 +12,48 @@ import (
 )
 
 func init() {
-    // Load environment variables
-    initializers.LoadEnvs()
+	// Load environment variables
+	initializers.LoadEnvs()
 
-    // Initialize the database
-    initializers.InitDB()
+	// Initialize the database
+	initializers.InitDB()
 }
 
 func main() {
-    // Set Gin mode based on GO_ENV value
-    if os.Getenv("GO_ENV") == "production" {
-        gin.SetMode(gin.ReleaseMode)
-    } else {
-        gin.SetMode(gin.DebugMode)
-    }
+	// Set Gin mode based on GO_ENV value
+	if os.Getenv("GO_ENV") == "production" {
+		gin.SetMode(gin.ReleaseMode)
+	} else {
+		gin.SetMode(gin.DebugMode)
+	}
 
-    // Initialize the application
-    app := gin.New()
+	// Initialize the application
+	app := gin.New()
 
-    // Set trusted proxies (only for production)
-    if os.Getenv("GO_ENV") == "production" {
-        // Set list of trusted proxies
-        err := app.SetTrustedProxies([]string{
-            "192.168.1.1",
-            "192.168.1.2",
-        })
+	// Set trusted proxies (only for production)
+	if os.Getenv("GO_ENV") == "production" {
+		// Set list of trusted proxies
+		err := app.SetTrustedProxies([]string{
+			"192.168.1.1",
+			"192.168.1.2",
+		})
 
-        // Panic if any error occurred
-        if err != nil {
-            panic(err)
-        }
-    }
+		// Panic if any error occurred
+		if err != nil {
+			panic(err)
+		}
+	}
 
-    // Use the default recovery middleware for error handling
-    app.Use(gin.Recovery())
+	// Use the default recovery middleware for error handling
+	app.Use(gin.Recovery())
 
-    // Configure CORS middleware
-    app.Use(cors.New(config.CORS))
+	// Configure CORS middleware
+	app.Use(cors.New(config.CORS))
 
-    // Use the routes
-    useRoutes.Dish(app)
-    useRoutes.Order(app)
+	// Register the routes
+	dish.RegisterRoutes(app)
+	order.RegisterRoutes(app)
 
-    // Run the application
-    app.Run()
+	// Run the application
+	app.Run()
 }

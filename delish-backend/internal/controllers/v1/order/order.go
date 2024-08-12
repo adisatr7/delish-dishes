@@ -1,7 +1,7 @@
-package v1
+package order
 
 import (
-	"delish-backend/internal/services"
+	order_service "delish-backend/internal/services/order"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +13,7 @@ func CreateOrder(ctx *gin.Context) {
 	var body struct {
 		CustomerName *string
 		Note         *string
-		DishOrders   []services.DishOrder
+		DishOrders   []order_service.DishOrder
 	}
 	ctx.BindJSON(&body)
 
@@ -34,7 +34,7 @@ func CreateOrder(ctx *gin.Context) {
 	}
 
 	// Create a new Order record
-	err := services.CreateOrder(services.CreateOrderParams{
+	err := order_service.CreateOrder(order_service.CreateOrderParams{
 		CustomerName: *body.CustomerName,
 		DishOrders:   body.DishOrders,
 	})
@@ -58,7 +58,7 @@ func CreateOrder(ctx *gin.Context) {
 // Get all Order records
 func GetAllOrders(ctx *gin.Context) {
 	// Get all Order records
-	orders, err := services.GetAllOrders()
+	orders, err := order_service.GetAllOrders()
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
@@ -82,7 +82,7 @@ func GetOrderById(ctx *gin.Context) {
 	orderId := ctx.Param("id")
 
 	// Get the Order record by its ID
-	order, err := services.GetOrderById(orderId)
+	order, err := order_service.GetOrderById(orderId)
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
@@ -121,7 +121,7 @@ func UpdateOrderById(ctx *gin.Context) {
 	}
 
 	// Update the Order record by its ID. For now, only the customer name can be updated
-	err := services.UpdateOrder(orderId, services.UpdateOrderParams{
+	err := order_service.UpdateOrder(orderId, order_service.UpdateOrderParams{
 		CustomerName: *body.CustomerName,
 	})
 
@@ -147,7 +147,7 @@ func DeleteOrderById(ctx *gin.Context) {
 	orderId := ctx.Param("id")
 
 	// Delete the Order record by its ID
-	err := services.DeleteOrderById(orderId)
+	err := order_service.DeleteOrderById(orderId)
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {

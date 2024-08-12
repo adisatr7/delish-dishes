@@ -1,4 +1,4 @@
-package services
+package dish
 
 import (
 	"delish-backend/internal/initializers"

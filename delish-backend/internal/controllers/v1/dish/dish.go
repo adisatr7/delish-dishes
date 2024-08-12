@@ -1,7 +1,7 @@
-package v1
+package dish
 
 import (
-	"delish-backend/internal/services"
+	dish_services "delish-backend/internal/services/dish"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,16 +32,9 @@ func CreateDish(ctx *gin.Context) {
 		})
 		return
 	}
-	if *body.Price < 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error":   "Price is invalid!",
-			"success": false,
-		})
-		return
-	}
 
 	// Create a new Dish record
-	err := services.CreateDish(services.DishParams{
+	err := dish_services.CreateDish(dish_services.DishParams{
 		Name:  body.Name,
 		Desc:  body.Desc,
 		Price: *body.Price,
@@ -66,7 +59,7 @@ func CreateDish(ctx *gin.Context) {
 // Get all Dish records
 func GetAllDishes(ctx *gin.Context) {
 	// Get all Dish records
-	dishes, err := services.GetAllDishes()
+	dishes, err := dish_services.GetAllDishes()
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
@@ -90,7 +83,7 @@ func GetDishById(ctx *gin.Context) {
 	dishId := ctx.Param("id")
 
 	// Get the Dish record by its ID
-	dish, err := services.GetDishById(dishId)
+	dish, err := dish_services.GetDishById(dishId)
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
@@ -140,7 +133,7 @@ func UpdateDishById(ctx *gin.Context) {
 	}
 
 	// Update the Dish record by its ID
-	err := services.UpdateDish(dishId, services.DishParams{
+	err := dish_services.UpdateDish(dishId, dish_services.DishParams{
 		Name: body.Name,
 		Desc: body.Desc,
 	})
@@ -167,7 +160,7 @@ func DeleteDishById(ctx *gin.Context) {
 	dishId := ctx.Param("id")
 
 	// Delete the Dish record by its ID
-	err := services.DeleteDishById(dishId)
+	err := dish_services.DeleteDishById(dishId)
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {

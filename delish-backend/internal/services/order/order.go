@@ -1,8 +1,9 @@
-package services
+package order
 
 import (
 	"delish-backend/internal/models"
 	"delish-backend/internal/utils"
+	dish_services "delish-backend/internal/services/dish"
 	"errors"
 )
 
@@ -53,7 +54,7 @@ func CreateOrder(params CreateOrderParams) error {
 		}
 
 		// Get the Order record by its ID listed in the DishOrder slice
-		currentDish, err := GetDishById(orderedDish.DishID)
+		currentDish, err := dish_services.GetDishById(orderedDish.DishID)
 
 		// Handdle errors if any
 		if err != nil {
