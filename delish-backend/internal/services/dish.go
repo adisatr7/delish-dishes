@@ -120,6 +120,11 @@ func UpdateDish(id string, params Params) error {
 	dish.Desc = &params.Desc
 	dish.Price = params.Price
 
+	// Add dot at the end of the description if it is not empty and it hasn't already
+	if dish.Desc != nil && (*dish.Desc)[len(*dish.Desc)-1] != '.' {
+		*dish.Desc += "."
+	}
+
 	// Save the updated Dish record
 	if err := db.Save(dish).Error; err != nil {
 		return err
