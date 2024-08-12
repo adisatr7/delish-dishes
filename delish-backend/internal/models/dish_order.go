@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type DishOrder struct {
 	gorm.Model
-	ID      string `gorm:"primaryKey"`
-	DishID  string `gorm:"type:uuid;foreignKey"`
-    Dish    Dish   `gorm:"joinForeignKey:DishID"`
-	OrderID string `gorm:"type:uuid;foreignKey"`
-    Order   Order  `gorm:"joinForeignKey:OrderID"`
+	ID      string `gorm:"primaryKey" json:"id"`
+	DishID  string `gorm:"type:uuid;foreignKey" json:"dishId"`
+    Dish    Dish   `gorm:"joinForeignKey:DishID" json:"dish"`
+	OrderID string `gorm:"type:uuid;foreignKey" json:"orderId"`
+    Order   Order  `gorm:"joinForeignKey:OrderID" json:"order"`
 }

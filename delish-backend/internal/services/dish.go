@@ -5,8 +5,6 @@ import (
 	"delish-backend/internal/models"
 	"delish-backend/internal/utils"
 	"errors"
-	"log"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -15,6 +13,7 @@ import (
 type Params struct {
 	Name string
 	Desc string
+	Price int64
 }
 
 // Get the database instance
@@ -39,11 +38,17 @@ func CreateDish(params Params) error {
 		return err
 	}
 
+	// Add dot at the end of the description if it is not empty and it hasn't already
+	if params.Desc != "" && params.Desc[len(params.Desc)-1] != '.' {
+		params.Desc += "."
+	}
+
 	// Create a new Dish record
 	dish := models.Dish{
 		ID:   utils.GenerateUUID(),
 		Name: params.Name,
 		Desc: &params.Desc,
+		Price: params.Price,
 	}
 
 	// Save the new Dish record
@@ -68,12 +73,10 @@ func GetAllDishes() ([]*models.Dish, error) {
 	var dishes []*models.Dish
 
 	// Get all Dish records where deleted_at is NULL
-	if err := db.Where("deleted_at IS NULL").Find(&dishes).Error; err != nil {
+	if err := db.Find(&dishes).Error; err != nil {
 		// Return the error if any
 		return nil, err
 	}
-
-	log.Printf("Dishes: %v", dishes)
 
 	// Return the Dish records if no error occurred
 	return dishes, nil
@@ -115,7 +118,7 @@ func UpdateDish(id string, params Params) error {
 	// Update the Dish record with the new values
 	dish.Name = params.Name
 	dish.Desc = &params.Desc
-	dish.UpdatedAt = time.Now()
+	dish.Price = params.Price
 
 	// Save the updated Dish record
 	if err := db.Save(dish).Error; err != nil {

@@ -11,15 +11,30 @@ import (
 func CreateDish(ctx *gin.Context) {
 	// Parse the request body
 	var body struct {
-		Name string
-		Desc string
+		Name  string
+		Desc  string
+		Price *int64
 	}
 	ctx.BindJSON(&body)
 
 	// Validate the request body
 	if body.Name == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "Name is required",
+			"error":   "Name is required!",
+			"success": false,
+		})
+		return
+	}
+	if body.Price == nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Price is required! If item is free, set price to 0.",
+			"success": false,
+		})
+		return
+	}
+	if *body.Price < 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Price is invalid!",
 			"success": false,
 		})
 		return
@@ -27,14 +42,15 @@ func CreateDish(ctx *gin.Context) {
 
 	// Create a new Dish record
 	err := services.CreateDish(services.Params{
-		Name: body.Name,
-		Desc: body.Desc,
+		Name:  body.Name,
+		Desc:  body.Desc,
+		Price: *body.Price,
 	})
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"success": false,
 		})
 		return
@@ -55,7 +71,7 @@ func GetAllDishes(ctx *gin.Context) {
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"success": false,
 		})
 		return
@@ -63,7 +79,7 @@ func GetAllDishes(ctx *gin.Context) {
 
 	// On success, return a 200 OK response with the Dish records
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": dishes,
+		"data":    dishes,
 		"success": true,
 	})
 }
@@ -79,7 +95,7 @@ func GetDishById(ctx *gin.Context) {
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"success": false,
 		})
 		return
@@ -87,7 +103,7 @@ func GetDishById(ctx *gin.Context) {
 
 	// On success, return a 200 OK response with the Dish record
 	ctx.JSON(http.StatusOK, gin.H{
-		"data": dish,
+		"data":    dish,
 		"success": true,
 	})
 }
@@ -99,8 +115,9 @@ func UpdateDishById(ctx *gin.Context) {
 
 	// Parse the request body
 	var body struct {
-		Name string
-		Desc string
+		Name  string
+		Desc  string
+		Price int64
 	}
 	ctx.BindJSON(&body)
 
@@ -108,7 +125,15 @@ func UpdateDishById(ctx *gin.Context) {
 	if body.Name == "" {
 		// On error, return a 400 Bad Request response
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": "Name is required!",
+			"error":   "Name is required!",
+			"success": false,
+		})
+		return
+	}
+	if body.Price < 0 {
+		// On error, return a 400 Bad Request response
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Price is invalid!",
 			"success": false,
 		})
 		return
@@ -123,7 +148,7 @@ func UpdateDishById(ctx *gin.Context) {
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"success": false,
 		})
 		return
@@ -147,7 +172,7 @@ func DeleteDishById(ctx *gin.Context) {
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
+			"error":   err.Error(),
 			"success": false,
 		})
 		return
