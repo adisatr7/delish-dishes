@@ -13,7 +13,7 @@ func RegisterRoutes(app *gin.Engine) {
         // Route to create a new dish
         route.POST("/", dish_controller.CreateDish)
         // Route to get all dishes
-        route.GET("/", dish_controller.GetAllDish)
+        route.GET("/", dish_controller.GetAllDishes)
 
         // Group routes that operate on a specific dish identified by its ID
         specificRoute := route.Group("/:id")

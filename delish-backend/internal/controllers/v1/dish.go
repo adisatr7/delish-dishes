@@ -48,9 +48,9 @@ func CreateDish(ctx *gin.Context) {
 }
 
 // Get all Dish records
-func GetAllDish(ctx *gin.Context) {
+func GetAllDishes(ctx *gin.Context) {
 	// Get all Dish records
-	dishes, err := services.GetAllDish()
+	dishes, err := services.GetAllDishes()
 
 	// On error, return a 500 Internal Server Error response
 	if err != nil {
