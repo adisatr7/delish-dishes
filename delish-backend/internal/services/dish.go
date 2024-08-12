@@ -22,7 +22,7 @@ func CreateDish(params Params) error {
     dish := models.Dish{
         ID: utils.GenerateUUID(),
         Name: params.Name,
-        Desc: params.Desc,
+        Desc: &params.Desc,
     }
 
 	// Save the new Dish record
@@ -75,7 +75,7 @@ func UpdateDish(id string, params Params) error {
 
     // Update the Dish record with the new values
     dish.Name = params.Name
-    dish.Desc = params.Desc
+    dish.Desc = &params.Desc
     dish.UpdatedAt = time.Now()
 
     // Save the updated Dish record
