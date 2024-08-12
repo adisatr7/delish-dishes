@@ -21,7 +21,7 @@ func RegisterRoutes(app *gin.Engine) {
             // Route to get a specific dish by ID
             specificRoute.GET("/", dish_controller.GetDishById)
             // Route to update a specific dish by ID
-            specificRoute.PATCH("/", dish_controller.PatchDishById)
+            specificRoute.PATCH("/", dish_controller.UpdateDishById)
             // Route to delete a specific dish by ID
             specificRoute.DELETE("/", dish_controller.DeleteDishById)
         }
