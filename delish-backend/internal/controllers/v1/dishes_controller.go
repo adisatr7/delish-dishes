@@ -1,19 +1,23 @@
 package v1
 
 import (
+	"delish-backend/internal/initializers"
+
 	"github.com/gin-gonic/gin"
 )
+
+var db = *initializers.DB
+
 
 // Create a new Dish record
 func CreateDish(ctx *gin.Context) {
 	// body := ctx.Request.Body
+	// db.Create(&body)
 }
 
 // Get all Dish records
 func GetAllDish(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{
-		"message": "Get all dishes",
-	})
+	db.Find(&Dishes{})
 }
 
 // Get one Dish record by its ID

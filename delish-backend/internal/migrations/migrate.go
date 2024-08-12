@@ -15,9 +15,7 @@ func init() {
 }
 
 func main() {
+	initializers.DB.AutoMigrate(&models.DishOrder{})
 	initializers.DB.AutoMigrate(&models.Dish{})
 	initializers.DB.AutoMigrate(&models.Order{})
-
-	// ! Foreign key constraints are still error
-	initializers.DB.AutoMigrate(&models.DishOrder{})
 }
